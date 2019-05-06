@@ -12,7 +12,7 @@
 
 * stuff
 
-##V isual Feedback
+## Visual Feedback
 
 * stuff
 
