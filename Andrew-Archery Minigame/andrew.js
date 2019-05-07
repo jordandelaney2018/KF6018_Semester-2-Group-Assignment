@@ -17,9 +17,9 @@ class SlingRing extends THREE.Group
     	//Orb   		
 		var orb_geo = new THREE.SphereGeometry(size, 32, 32);		
 		var orb_mat = new THREE.MeshPhongMaterial({color: 0xFF0000});
-    	this.orb_msh = new THREE.Mesh( orb_geo, orb_mat ); //use this for public
-    	this.root_msh.add(this.orb_msh);	
-    	this.orb_msh.position.x += distance;
+		this.orb_msh = new THREE.Mesh( orb_geo, orb_mat ); //use this for public
+		this.root_msh.add(this.orb_msh);
+		this.orb_msh.position.x += distance;
 	}
 	contact(hand) //Check if hand has touched this.orb_msh
 	{
@@ -51,14 +51,21 @@ class Arrow extends THREE.Group
 	{
 		super();
 
-//Arrow Mesh
-var arrow_geo = new THREE.BoxGeometry( 0.05, 0.05, 0.5 );
-var arrow_mat = new THREE.MeshBasicMaterial( {color: 0x654321} );
-var arrow_msh = new THREE.Mesh( arrow_geo, arrow_mat );
-
-var geometry = new THREE.ConeGeometry( 5, 20, 32 );
-var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-var cone = new THREE.Mesh( geometry, material );
+		//Arrow stick
+		var stick_geo = new THREE.BoxGeometry( 0.05, 0.05, 0.5 );
+		var stick_mat = new THREE.MeshBasicMaterial( {color: 0x654321} ); //brown
+		var stick_msh = new THREE.Mesh( stick_geo, stick_mat );
+		this.add(stick_msh);
+		//Arrow tip
+		var tip_geo = new THREE.ConeGeometry( 5, 20, 32 );
+		var tip_mat = new THREE.MeshBasicMaterial( {color: 0xffffff} ); //white
+		var tip_msh = new THREE.Mesh( tip_geo, tip_mat );
+		this.add(tip_msh);
+		//Arrow fletching
+		var fletch_geo = new THREE.BoxGeometry( 0.05, 0.05, 0.5 );
+		var fletch_mat = new THREE.MeshBasicMaterial( {color: 0xffffff} ); //white
+		var fletch_msh = new THREE.Mesh( fletch_geo, fletch_mat );
+		this.add(fletch_msh);
 	}
 }
 
@@ -141,6 +148,8 @@ meshLH.add(slingRing);
 var rightShoulder_msh = new THREE.Mesh(gLH, mLH);
 scene.add(rightShoulder_msh);
 
+//Add arrow to scene for viewing
+scene.add(new Arrow);
 
 // The animate function: called every frame
 var iFrame = 0;
