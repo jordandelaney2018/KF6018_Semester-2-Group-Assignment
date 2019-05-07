@@ -2,19 +2,22 @@
 
 ## Rendering Elements
 
-* stuff
+* 
 
 ## Motion Sensing Features
 
-* stuff
+* 
 
 ## User Performance Analysis
 
-* stuff
+* Score updates when target is hit
 
 ## Visual Feedback
 
-* stuff
+* Arrow attaches to hand when user touches quiver
+* Arrow fires forward when pulled back far enough
+* Sparks fly off when using slingring
+* Score updates when target is hit
 
 ## Student Proposed Features
 ### Jordan Delaney 16015149
@@ -29,9 +32,9 @@
 ### Andrew Patton 16007006
 
 * Archery minigame
-  Player can shoot targets by grabbing an arrow from their quiver (touch their shoulder) 
+  * Player can shoot targets with a bow&arrow
 * Sling ring (Dr Strange)
-  Player can use circular motion to signal they want to return to the main menu
+  * Player can use circular motion to signal they want to return to the main menu
 
 ### Luke Phillips 14015821
 
