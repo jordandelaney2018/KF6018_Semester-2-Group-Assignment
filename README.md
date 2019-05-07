@@ -27,7 +27,7 @@
 
 ### Cuthbert Mutumbwa 16019711
 
-* stuff
+* 
 
 ### Andrew Patton 16007006
 
@@ -38,4 +38,4 @@
 
 ### Luke Phillips 14015821
 
-* stuff
+* 
