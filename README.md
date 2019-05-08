@@ -22,8 +22,8 @@
 ## Student Proposed Features
 ### Jordan Delaney 16015149
 
-* Moving targets
-* Main Menu
+* Moving targets using interpolation animation
+* Hub area which connects games together
 
 ### Cuthbert Mutumbwa 16019711
 
