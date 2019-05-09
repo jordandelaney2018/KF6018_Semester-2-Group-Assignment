@@ -24,6 +24,7 @@
 
 * Moving targets using interpolation animation
 * Hub area which connects games together
+* Scene Setup, Models and Particles 
 
 ### Cuthbert Mutumbwa 16019711
 
