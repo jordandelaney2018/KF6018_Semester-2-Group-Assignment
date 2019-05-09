@@ -31,7 +31,7 @@
 * Detects hand close
 * Detects hand clapping
 * Detects User touching Menu Spheres
-* Detects contact between hand and shoulder (get new arrow, and shoot)
+* Detects contact between hand and shoulder
 
 ## User Performance Analysis
 
