@@ -28,8 +28,8 @@
 ### Cuthbert Mutumbwa 16019711
 
 * Projectile Minigame
- *Physics implemented
- *Player opens and closes his hands, to shoot
+* Physics implemented
+* Player opens and closes his hands, to shoot
 
 ### Andrew Patton 16007006
 
