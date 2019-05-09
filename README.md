@@ -28,9 +28,10 @@
 
 ### Cuthbert Mutumbwa 16019711
 
-* Projectile Minigame
-* Physics implemented
-* Player opens and closes his hands, to shoot
+* Projectile bowling Mini game
+* Ball prjectile collides with objects within world space
+* close hands to shoot barrage of balls to knock over the objects
+* once hands close the game will count down, and once the countdown is hit the game will reset
 
 ### Andrew Patton 16007006
 
