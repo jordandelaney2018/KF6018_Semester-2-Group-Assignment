@@ -33,7 +33,9 @@
 ### Jordan Delaney 16015149
 
 * Moving targets using interpolation animation
+* Target collision, including score updates and arrows sticking into targets
 * Hub area which connects games together
+* Ui Features on hub area for insturctions and to link the features together
 * Scene Setup, Models and Particles 
 
 ### Cuthbert Mutumbwa 16019711
