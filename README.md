@@ -1,6 +1,6 @@
 # KF6018_A2_w16015149_w16019711_w16007006_w14015821
 
-# Instructions
+## Instructions
 * Hub Area, move hand onto the position of the balls to select a game to play
 * 
 
