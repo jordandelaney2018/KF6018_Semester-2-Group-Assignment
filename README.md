@@ -2,7 +2,9 @@
 
 ## Instructions
 * Hub Area, move hand onto the position of the balls to select a game to play
-* 
+* Bow Page, (Please Note the target placed closer to you for testing the collision)
+* Bowl Page,
+* Explison Page, 
 
 
 ## Rendering Elements
@@ -14,6 +16,7 @@
 * Detects hand open 
 * Detects hand close
 * Detects hand clapping
+* Detects User touching Menu Spheres
 
 ## User Performance Analysis
 
