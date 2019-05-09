@@ -306,9 +306,6 @@ function initStuff(){
 	pin1.castShadow = true;
 	pin1.receiveShadow = true;
 
-
-
-
 	
 }
 
@@ -466,6 +463,7 @@ function initInput() {
 						);
 
 						clickRequest = true;
+						window.location.href = "GameHub.html";
 							console.log("mouse");
 
 					}
