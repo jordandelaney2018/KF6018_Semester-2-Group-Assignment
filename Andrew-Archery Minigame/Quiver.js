@@ -27,7 +27,7 @@ class Quiver extends THREE.Group
 		//Attach 'dummy' arrow to quiver
 		var arrow = new Arrow(0.25);
 		main_msh.add(arrow);
-		arrow.rotation.x-=Math.PI/2;
+		arrow.rotation.x+=Math.PI/2;
 		arrow.position.y+=0.1;
 	}
 }

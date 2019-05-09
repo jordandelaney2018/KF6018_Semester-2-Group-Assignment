@@ -1,25 +1,3 @@
-function collision(meshA, meshB)
-{
-
-	var meshApos = meshA.getWorldPosition(new THREE.Vector3());
-	var meshBpos = meshB.getWorldPosition(new THREE.Vector3());
-
-	var distance = Math.sqrt(Math.pow(meshApos.x - meshBpos.x, 2)
-           			       + Math.pow(meshApos.y - meshBpos.y, 2)
-           			       + Math.pow(meshApos.z - meshBpos.z, 2));
-	var sumRadius = meshA.geometry.parameters.radius + meshB.geometry.parameters.radius;	
-
-	if (distance < sumRadius)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}		
-}
-
-
 // Scene
 var scene = new THREE.Scene();
 
@@ -45,38 +23,40 @@ lightThis.intensity = 0.8;
 scene.add(lightThis);
 
 // Floor
-var gFloor = new THREE.PlaneGeometry(3, 3);
-var mFloor = new THREE.MeshPhongMaterial( {color: 0x33FF33, side: THREE.DoubleSide} );
-var floor = new THREE.Mesh(gFloor, mFloor);
-floor.rotation.x = Math.PI/2;
-floor.position.x = floor.position.y = floor.position.z = -1;
-scene.add(floor);
+var floor_geo = new THREE.PlaneGeometry(10, 10);
+var floor_mat = new THREE.MeshPhongMaterial( {color: 0x3F3F3F, side: THREE.DoubleSide} );
+var floor_msh = new THREE.Mesh(floor_geo, floor_mat);
+floor_msh.rotation.x = Math.PI/2;
+floor_msh.position.x = floor_msh.position.y = floor_msh.position.z = -1;
+scene.add(floor_msh);
 
 // Add mouse/camera controls
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 0, 0);
 controls.update();
 
+/**************************************************/
+
 //Node spheres
 var node_mat = new THREE.MeshPhongMaterial( { color: 0xCCCCCC } ); 
 //Left Hand
-var hand_geo = new THREE.SphereGeometry(0.1, 18, 18);
+var hand_geo = new THREE.SphereGeometry(0.05, 18, 18);
 var meshLH = new THREE.Mesh(hand_geo, node_mat);
 scene.add(meshLH);
+
+//Add SlingRing to left hand
+var slingRing = new SlingRing();
+meshLH.add(slingRing);
+
+//Add bow to left hand
+var bow = new Bow();
+meshLH.add(bow);
 
 //Right Hand
 var mRH = new THREE.MeshPhongMaterial( { color: 0x00CCCC } ); 
 var meshRH = new THREE.Mesh(hand_geo, node_mat);
 scene.add(meshRH);
 
-//Add SlingRing to hand
-var slingRing = new SlingRing();
-meshLH.add(slingRing);
-
-//TEMP SOLUTION: Add temp arrow to hand
-var tempArrow = new Arrow(0.5);
-meshRH.add(tempArrow);
-tempArrow.position.z-=.125;
 
 //Shoulders
 //Right
@@ -94,61 +74,12 @@ quiver_msh.position.y -= 0.1;
 quiver_msh.position.z += 0.1;
 
 
-// The animate function: called every frame
-var iFrame = 0;
-function animate()
-{
-	requestAnimationFrame(animate);
-
-	//Get json
-	if (jsonFrm>0) {
-		getBodies(jsonMotion[iFrame]);
-		iFrame ++;
-		iFrame = iFrame % jsonFrm;   //Keep looping the frame
-	}
-
-	//Check slingRing contact
-	slingRing.contact(meshRH);
-	if(slingRing.percentage >= 100)
-	{
-		meshLH.material.color.setHex(0x0000FF);
-	}
-
-	//TEMP SOLUTION: Check hand contact
-	if(slingRing.percentage >= 75)
-	{
-		tempArrow.shoot();
-	}
-	//TEMP SOLUTION: animate tempArrow
-	tempArrow.animate();
-
-	//Check shoulder contact
-	if(collision(meshRH, rightShoulder_msh))
-	{
-		//if equipped 
-		//  fire arrow
-		//else
-		//  meshRH.add(new Arrow());
-		//  equipped = true;
-		//endif
-	}
-	
-	//Check hand contact
-	if(collision(meshRH, meshLH))
-	{
-		//Attach arrow to both hands?
-	}
-
-	renderer.render(scene, camera);
-}
-animate();
-
 // init json array
 var jsonFrm = 0;
 var jsonMotion = null;
 
 //usage:
-readTextFile("recording.json", function(text){
+readTextFile("archermotion.json", function(text){
     jsonMotion = JSON.parse(text);
   	var count = Object.keys(jsonMotion).length;
   	//console.log(count);
@@ -181,14 +112,6 @@ kinectron = new Kinectron(); // Define and create an instance of kinectron
 //Hands
 var node_geo = new THREE.SphereGeometry(0.1, 18, 18);
 var node_mat = new THREE.MeshPhongMaterial( { color: 0xCCCCCC } ); 
-
-//Left Hand
-var leftHand_msh = new THREE.Mesh(node_geo, node_mat);
-scene.add(leftHand_msh);
-
-//Right Hand
-var rightHand_msh = new THREE.Mesh(node_geo, node_mat);
-scene.add(rightHand_msh);
 
 //Head
 var head_geo = new THREE.SphereGeometry(0.1, 18, 18);
@@ -246,6 +169,94 @@ Spine_geo.vertices.push(new THREE.Vector3(0,2,2));
 var Spine = new THREE.Line(Spine_geo, skeleton_mat);
 scene.add(Spine);
 
+
+// The animate function: called every frame
+var iFrame = 0;
+var arrows = []; //0 = latest arrow
+var equipped = false;
+var state = 0; //0 = no arrow, 1 = equipped, 2 = nocked
+function animate()
+{
+	requestAnimationFrame(animate);
+
+	/*JSON*/
+	if (jsonFrm>0) {
+		getBodies(jsonMotion[iFrame]);
+		iFrame ++;
+		iFrame = iFrame % jsonFrm;   //Keep looping the frame
+	}
+
+	//Skip first 30 frames	
+	if(iFrame > 30)
+	{
+		/*SLINGRING*/
+		slingRing.contact(meshRH);
+		if(slingRing.percentage >= 100)
+		{
+			//Back to main menu
+			meshLH.material.color.setHex(0x0000FF);
+		}
+
+		/*ARCHER*/
+		//Shoulder contact
+		if(collision(meshRH, rightShoulder_msh))
+		{
+			//If no arrow is equipped
+			if(state == 0)
+			{
+				arrows.unshift(new Arrow(0.5)); //Add new arrow at #0
+				arrows[0].equip(meshRH);//Attach new arrow to hand
+				state = 1
+
+				//Cull old arrows
+				if(arrows.length> 5)
+				{
+					arrows.pop();
+				}
+			}
+			//If currently equipped arrow is nocked, shoot it
+			else if(state == 2)
+			{
+				arrows[0].shoot();
+				state = 0;
+				bow.reset();
+			}
+		}
+
+		//Check hand contact, nock arrow
+		if(collision(meshRH, meshLH))
+		{
+			if(arrows.length > 0 && state < 2)
+			{
+				arrows[0].nock(meshLH);
+				state = 2;
+			}
+		}
+
+		//Arrow animation 
+		//  length/rotation if nocked,
+		//  movement if shot
+		for(let i =0; i < arrows.length; i++)
+		{
+			if(arrows[i] !=null)
+			{
+				arrows[i].animate();
+			}
+		}
+
+		if(state == 2)
+		{
+			if(!bow.nocked)
+			{
+				bow.nock(meshRH);
+			}
+			bow.animate();
+		}
+	}
+
+	renderer.render(scene, camera);
+}
+animate();
 
 // The getBodies callback function: called once every time kinect obtain a frame
 function getBodies(skeleton) 
@@ -356,4 +367,19 @@ function getBodies(skeleton)
 	RightLeg.geometry.vertices[2].y = skeleton.joints[kinectron.ANKLERIGHT].cameraY;
 	RightLeg.geometry.vertices[2].z = skeleton.joints[kinectron.ANKLERIGHT].cameraZ;
 	RightLeg.geometry.verticesNeedUpdate = true;*/
+}
+
+
+//The collision function: called to check if 2 meshs are colliding
+function collision(meshA, meshB)
+{
+	var meshApos = meshA.getWorldPosition(new THREE.Vector3());
+	var meshBpos = meshB.getWorldPosition(new THREE.Vector3());
+
+	var distance = Math.sqrt(Math.pow(meshApos.x - meshBpos.x, 2)
+           			       + Math.pow(meshApos.y - meshBpos.y, 2)
+           			       + Math.pow(meshApos.z - meshBpos.z, 2));
+	var sumRadius = meshA.geometry.parameters.radius + meshB.geometry.parameters.radius;	
+
+	return (distance < sumRadius);
 }

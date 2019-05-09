@@ -9,7 +9,7 @@ class SlingRing extends THREE.Group
 
 		this.percentage = 0;
 		//Root
-		var root_geo = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
+		var root_geo = new THREE.BoxGeometry( 0.05, 0.05, 0.05 );
 		var root_mat = new THREE.MeshBasicMaterial( { color: 0xAAAAAA } );
 		this.root_msh = new THREE.Mesh( root_geo, root_mat );
 		this.add(this.root_msh);
