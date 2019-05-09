@@ -126,13 +126,13 @@ function spawnTarget(){
                 if(i == 3){
                     target[i].position.x = -4;
                     target[i].position.y = 1;
-                    target[i].position.z = 10;
+                    target[i].position.z = -10;
                 }
 
                 if(i == 4){
                     target[i].position.x = 4;
                     target[i].position.y = 1;
-                    target[i].position.z = 10;
+                    target[i].position.z = -10;
                 }
             }
 
@@ -160,14 +160,14 @@ function spawnTarget(){
 
     //Position
     legLeftOne.position.x = 4.5;
-    legLeftOne.position.z = 10;
+    legLeftOne.position.z = -10;
     legRightOne.position.x = 3.5;
-    legRightOne.position.z = 10;
+    legRightOne.position.z = -10;
 
     legLeftTwo.position.x = -3.5;
-    legLeftTwo.position.z = 10;
+    legLeftTwo.position.z = -10;
     legRightTwo.position.x = -4.5;
-    legRightTwo.position.z = 10;
+    legRightTwo.position.z = -10;
 
     //Add to Scene
     scene.add(legLeftOne);
@@ -301,67 +301,6 @@ rightShoulder_msh.add(quiver_msh);
 quiver_msh.position.y -= 0.1;
 quiver_msh.position.z += 0.1;
 
-//Node spheres
-//Hands
-var node_geo = new THREE.SphereGeometry(0.1, 18, 18);
-var node_mat = new THREE.MeshPhongMaterial( { color: 0xCCCCCC } ); 
-
-//Head
-var head_geo = new THREE.SphereGeometry(0.1, 18, 18);
-var head_mat = new THREE.MeshPhongMaterial( { color: 0xffff00 } ); 
-var head_msh = new THREE.Mesh(node_geo, node_mat);
-scene.add(head_msh);
-
-//Pelvis
-var pelvis_geo = new THREE.SphereGeometry(0.1, 18,18);
-var pelvis_mat = new THREE.MeshPhongMaterial( { color: 0xffff00 } ); 
-var pelvis_msh = new THREE.Mesh(pelvis_geo, pelvis_mat);
-scene.add(pelvis_msh);
-
-//Eyes
-var eye_geo = new THREE.SphereGeometry(0.025, 18, 18);
-var eye_mat = new THREE.MeshPhongMaterial( { color: 0x000000 } ); 
-
-//Left Eye
-var eyeL_msh = new THREE.Mesh(eye_geo, eye_mat);
-head_msh.add(eyeL_msh);
-eyeL_msh.position.x -= 0.05;
-eyeL_msh.position.y += 0.025;
-eyeL_msh.position.z -= 0.075;
-
-//Right Eye
-var eyeR_msh = new THREE.Mesh(eye_geo, eye_mat);
-head_msh.add(eyeR_msh);
-eyeR_msh.position.x += 0.05;
-eyeR_msh.position.y += 0.025;
-eyeR_msh.position.z -= 0.075;
-
-//Skeleton lines
-var skeleton_mat = new THREE.LineBasicMaterial({color: 0xff9999});
-var LeftArm_geo = new THREE.Geometry();
-LeftArm_geo.vertices.push(new THREE.Vector3(0,0,0));
-LeftArm_geo.vertices.push(new THREE.Vector3(0,1,0));
-LeftArm_geo.vertices.push(new THREE.Vector3(0,1,1));
-LeftArm_geo.vertices.push(new THREE.Vector3(0,2,2));
-var LeftArm = new THREE.Line(LeftArm_geo, skeleton_mat);
-scene.add(LeftArm);
-
-var RightArm_geo = new THREE.Geometry();
-RightArm_geo.vertices.push(new THREE.Vector3(0,0,0));
-RightArm_geo.vertices.push(new THREE.Vector3(0,1,0));
-RightArm_geo.vertices.push(new THREE.Vector3(0,1,1));
-RightArm_geo.vertices.push(new THREE.Vector3(0,2,2));
-var RightArm = new THREE.Line(RightArm_geo, skeleton_mat);
-scene.add(RightArm);
-
-var Spine_geo = new THREE.Geometry();
-Spine_geo.vertices.push(new THREE.Vector3(0,0,0));
-Spine_geo.vertices.push(new THREE.Vector3(0,1,0));
-Spine_geo.vertices.push(new THREE.Vector3(0,1,1));
-Spine_geo.vertices.push(new THREE.Vector3(0,2,2));
-var Spine = new THREE.Line(Spine_geo, skeleton_mat);
-scene.add(Spine);
-
 
 // -------------- Extra Controls and Functions --------------
 // Add mouse/camera controls
@@ -447,12 +386,13 @@ function ease(t) {
     return (Math.sin(t * Math.PI - Math.PI / 2) + 1) / 2;
 }
 
+
 // init json array
-/*var jsonFrm = 0;
+var jsonFrm = 0;
 var jsonMotion = null;
 
 //usage:
-readTextFile("js/archermotion.json", function(text){
+readTextFile("archermotion.json", function(text){
     jsonMotion = JSON.parse(text);
     var count = Object.keys(jsonMotion).length;
     //console.log(count);
@@ -471,186 +411,15 @@ function readTextFile(file, callback) {
         }
     }
     rawFile.send(null);
-}*/
-
-var score =0;
-var iFrame = 0;
-var arrows = []; //0 = latest arrow
-var state = 0; //0 = no arrow, 1 = equipped, 2 = nocked
-
-kinectron = new Kinectron("192.168.60.56"); // Define and create an instance of kinectron
-kinectron.makeConnection(); // Create connection between remote and application
-kinectron.startTrackedBodies(getBodies); // Start tracked bodies and set callback
-
-// -------------- Animate Function --------------
-function animate() {
-    // Move the Particle array to create rain effect
-    for (var i=0; i<iNumber; i++)
-    {
-        meshArray[i].position.y = meshArray[i].position.y - 0.2;
-        if (meshArray[i].position.y < 0)
-        {
-            meshArray[i].position.y = 10;
-        }
-    }
-
-    // -------------- Movement --------------
-    var steps = 1500;
-    var u = iFrame / steps;
-    if (u <= 1) {
-        console.log(u);
-    } else if (u >= 1) {
-        u = 0;
-        iFrame = 0;
-
-    }
-    requestAnimationFrame(animate);
-
-    pos = interpolateCurve(u);
-    target[0].position.x = pos[0];
-    target[0].position.y = pos[1];
-    target[0].position.z = 10;
-
-    pos = interpolateCurveTwo(getUbyArcLen(u));
-    target[1].position.x = pos[0];
-    target[1].position.y = pos[1];
-    target[1].position.z = 12;
-
-    pos = interpolateCurveThree(u);
-    target[2].position.x = pos[0];
-    target[2].position.y = pos[1];
-    target[2].position.z = 8;
-
-
-    /*JSON*/
-    /*if (jsonFrm>0) {
-        getBodies(jsonMotion[iFrame]);
-        iFrame ++;
-        iFrame = iFrame % jsonFrm;   //Keep looping the frame
-    }*/
-	
-
-    
-	/*SLINGRING*/
-	slingRing.contact(meshRH);
-	if(slingRing.percentage >= 100)
-	{
-		//Back to main menu
-		meshLH.material.color.setHex(0x0000FF);
-	}
-
-	/*ARCHER*/
-	//Shoulder contact
-	if(collision(meshRH, rightShoulder_msh))
-	{
-		//If no arrow is equipped
-		if(state == 0)
-		{
-			arrows.unshift(new Arrow(0.5)); //Add new arrow at #0
-			arrows[0].equip(meshRH);//Attach new arrow to hand
-			state = 1
-
-			//Cull old arrows
-			if(arrows.length> 5)
-			{
-				arrows.pop();
-			}
-		}
-		//If currently equipped arrow is nocked, shoot it
-		else if(state == 2)
-		{
-			arrows[0].shoot();
-			state = 0;
-			bow.reset();
-		}
-	}
-
-	//Check hand contact, nock arrow
-	if(collision(meshRH, meshLH))
-	{
-		if(arrows.length > 0 && state < 2)
-		{
-			arrows[0].nock(meshLH);
-			state = 2;
-		}
-	}
-
-	//Arrow animation
-	//  length/rotation if nocked,
-	//  movement if shot
-	for(let i =0; i < arrows.length; i++)
-	{
-		if(arrows[i] !=null)
-		{
-			arrows[i].animate();
-		}
-	}
-
-	if(state == 2)
-	{
-		if(!bow.nocked)
-		{
-			bow.nock(meshRH);
-		}
-		bow.animate();
-	}
-
-    //Check hand contact
-    if(collision(meshRH, meshLH))
-    {
-        //Attach arrow to both hands?
-    }
-
-    /*
-    // Target Arrow Collisions
-    // Moving Targets Give More Points
-    if (collision (target[0],tempArrow) || collision (target[1],tempArrow)||collision (target[2],tempArrow) && tempArrow.active == true){
-
-        // Increase the score and Print to UI
-        score = score + 2;
-        document.getElementById("displayScore").innerHTML = "Score:"+score;
-
-        //Set Arrow to stop when it hits target, set active to false so that it stops registering collision
-        tempArrow.velocity = 0;
-        tempArrow.active = false;
-        if (collision (target[0],tempArrow)){
-            // Set temp arrows new parent to be target so that the arrow moves with the target (emulating arrow sticking in target)
-            tempArrow.parent = target[0];
-        }
-        else if (collision (target[1],tempArrow)){
-            tempArrow.parent = target[1];
-        }
-        else if(collision (target[2],tempArrow)){
-            tempArrow.parent = target[2];
-        }
-
-    }
-
-    if (collision (target[3],tempArrow) || (target[4],tempArrow)&& tempArrow.active == true){
-
-        // Increase the score and Print to UI
-        score = score + 1;
-        document.getElementById("displayScore").innerHTML = "Score:"+score;
-
-        //Set Arrow to stop when it hits target, set active to false so that it stops registering collision
-        tempArrow.velocity = 0;
-        tempArrow.active = false;
-    }
-
-*/
-    //iFrame++;
-
-    renderer.render(scene, camera);
 }
-
-animate();
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Kinectron codes starting from here///////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Initialize kinectron
-
+kinectron = new Kinectron("192.168.60.56"); // Define and create an instance of kinectron
+kinectron.makeConnection(); // Create connection between remote and application
+kinectron.startTrackedBodies(getBodies); // Start tracked bodies and set callback
 
 // The getBodies callback function: called once every time kinect obtain a frame
 function getBodies(skeleton)
@@ -733,33 +502,173 @@ function getBodies(skeleton)
     pelvis_msh.position.x = skeleton.joints[kinectron.SPINEBASE].cameraX;
     pelvis_msh.position.y = skeleton.joints[kinectron.SPINEBASE].cameraY;
     pelvis_msh.position.z = skeleton.joints[kinectron.SPINEBASE].cameraZ;
+}
+var score =0;
+var iFrame = 0;
+var arrows = []; //0 = latest arrow
+var state = 0; //0 = no arrow, 1 = equipped, 2 = nocked
 
-    //Left Leg
-    /*LeftLeg.geometry.vertices[0].x = skeleton.joints[kinectron.HIPLEFT].cameraX;
-	LeftLeg.geometry.vertices[0].y = skeleton.joints[kinectron.HIPLEFT].cameraY;
-	LeftLeg.geometry.vertices[0].z = skeleton.joints[kinectron.HIPLEFT].cameraZ;
+// -------------- Animate Function --------------
+function animate() {
+    // Move the Particle array to create rain effect
+    for (var i=0; i<iNumber; i++)
+    {
+        meshArray[i].position.y = meshArray[i].position.y - 0.2;
+        if (meshArray[i].position.y < 0)
+        {
+            meshArray[i].position.y = 10;
+        }
+    }
 
-	LeftLeg.geometry.vertices[1].x = skeleton.joints[kinectron.KNEELEFT].cameraX;
-	LeftLeg.geometry.vertices[1].y = skeleton.joints[kinectron.KNEELEFT].cameraY;
-	LeftLeg.geometry.vertices[1].z = skeleton.joints[kinectron.KNEELEFT].cameraZ;
+    // -------------- Movement --------------
+    var steps = 1500;
+    var u = iFrame / steps;
+    if (u <= 1) {
+        console.log(u);
+    } else if (u >= 1) {
+        u = 0;
+        iFrame = 0;
 
-	LeftLeg.geometry.vertices[2].x = skeleton.joints[kinectron.ANKLELEFT].cameraX;
-	LeftLeg.geometry.vertices[2].y = skeleton.joints[kinectron.ANKLELEFT].cameraY;
-	LeftLeg.geometry.vertices[2].z = skeleton.joints[kinectron.ANKLELEFT].cameraZ;
-	LeftLeg.geometry.verticesNeedUpdate = true;
+    }
+    requestAnimationFrame(animate);
 
-	//Right Leg
-	RightLeg.geometry.vertices[0].x = skeleton.joints[kinectron.HIPRIGHT].cameraX;
-	RightLeg.geometry.vertices[0].y = skeleton.joints[kinectron.HIPRIGHT].cameraY;
-	RightLeg.geometry.vertices[0].z = skeleton.joints[kinectron.HIPRIGHT].cameraZ;
+    pos = interpolateCurve(u);
+    target[0].position.x = pos[0];
+    target[0].position.y = pos[1];
+    target[0].position.z = -10;
 
-	RightLeg.geometry.vertices[1].x = skeleton.joints[kinectron.KNEERIGHT].cameraX;
-	RightLeg.geometry.vertices[1].y = skeleton.joints[kinectron.KNEERIGHT].cameraY;
-	RightLeg.geometry.vertices[1].z = skeleton.joints[kinectron.KNEERIGHT].cameraZ;
+    pos = interpolateCurveTwo(getUbyArcLen(u));
+    target[1].position.x = pos[0];
+    target[1].position.y = pos[1];
+    target[1].position.z = -12;
 
-	RightLeg.geometry.vertices[2].x = skeleton.joints[kinectron.ANKLERIGHT].cameraX;
-	RightLeg.geometry.vertices[2].y = skeleton.joints[kinectron.ANKLERIGHT].cameraY;
-	RightLeg.geometry.vertices[2].z = skeleton.joints[kinectron.ANKLERIGHT].cameraZ;
-	RightLeg.geometry.verticesNeedUpdate = true;*/
+    pos = interpolateCurveThree(u);
+    target[2].position.x = pos[0];
+    target[2].position.y = pos[1];
+    target[2].position.z = -8;
+
+
+    /*JSON*/
+    if (jsonFrm>0) {
+        getBodies(jsonMotion[iFrame]);
+        iFrame ++;
+        iFrame = iFrame % jsonFrm;   //Keep looping the frame
+    }
+
+    //Skip first 30 frames
+    if(iFrame > 30)
+    {
+        /*SLINGRING*/
+        slingRing.contact(meshRH);
+        if(slingRing.percentage >= 100)
+        {
+            //Back to main menu
+            meshLH.material.color.setHex(0x0000FF);
+        }
+
+        /*ARCHER*/
+        //Shoulder contact
+        if(collision(meshRH, rightShoulder_msh))
+        {
+            //If no arrow is equipped
+            if(state == 0)
+            {
+                arrows.unshift(new Arrow(0.5)); //Add new arrow at #0
+                arrows[0].equip(meshRH);//Attach new arrow to hand
+                state = 1
+
+                //Cull old arrows
+                if(arrows.length> 5)
+                {
+                    arrows.pop();
+                }
+            }
+            //If currently equipped arrow is nocked, shoot it
+            else if(state == 2)
+            {
+                arrows[0].shoot();
+                state = 0;
+                bow.reset();
+            }
+        }
+
+        //Check hand contact, nock arrow
+        if(collision(meshRH, meshLH))
+        {
+            if(arrows.length > 0 && state < 2)
+            {
+                arrows[0].nock(meshLH);
+                state = 2;
+            }
+        }
+
+        //Arrow animation
+        //  length/rotation if nocked,
+        //  movement if shot
+        for(let i =0; i < arrows.length; i++)
+        {
+            if(arrows[i] !=null)
+            {
+                arrows[i].animate();
+            }
+        }
+
+        if(state == 2)
+        {
+            if(!bow.nocked)
+            {
+                bow.nock(meshRH);
+            }
+            bow.animate();
+        }
+    }
+
+    //Check hand contact
+    if(collision(meshRH, meshLH))
+    {
+        //Attach arrow to both hands?
+    }
+
+    /*
+    // Target Arrow Collisions
+    // Moving Targets Give More Points
+    if (collision (target[0],tempArrow) || collision (target[1],tempArrow)||collision (target[2],tempArrow) && tempArrow.active == true){
+
+        // Increase the score and Print to UI
+        score = score + 2;
+        document.getElementById("displayScore").innerHTML = "Score:"+score;
+
+        //Set Arrow to stop when it hits target, set active to false so that it stops registering collision
+        tempArrow.velocity = 0;
+        tempArrow.active = false;
+        if (collision (target[0],tempArrow)){
+            // Set temp arrows new parent to be target so that the arrow moves with the target (emulating arrow sticking in target)
+            tempArrow.parent = target[0];
+        }
+        else if (collision (target[1],tempArrow)){
+            tempArrow.parent = target[1];
+        }
+        else if(collision (target[2],tempArrow)){
+            tempArrow.parent = target[2];
+        }
+
+    }
+
+    if (collision (target[3],tempArrow) || (target[4],tempArrow)&& tempArrow.active == true){
+
+        // Increase the score and Print to UI
+        score = score + 1;
+        document.getElementById("displayScore").innerHTML = "Score:"+score;
+
+        //Set Arrow to stop when it hits target, set active to false so that it stops registering collision
+        tempArrow.velocity = 0;
+        tempArrow.active = false;
+    }
+
+*/
+    iFrame++;
+
+    renderer.render(scene, camera);
 }
 
+animate();
