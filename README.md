@@ -11,7 +11,9 @@
 
 ## Motion Sensing Features
 
-* 
+* Detects hand open 
+* Detects hand close
+* Detects hand clapping
 
 ## User Performance Analysis
 
@@ -34,10 +36,11 @@
 ### Cuthbert Mutumbwa 16019711
 
 * Projectile bowling Mini game
-* Ball prjectile collides with objects within world space
+* In First Person View
+* Ball projectile collides with objects within world space
 * close hands to shoot barrage of balls to knock over the objects
-* once hands close the game will count down, and once the countdown is hit the game will reset
-* clap to re align objects to continue
+* once hands close the game will count down, and once the countdown is hit the game will allow you to reset
+* clap to reset game
 * Use mouse click to go back to main menu
 
 ### Andrew Patton 16007006
