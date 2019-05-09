@@ -36,9 +36,9 @@ class SlingRing extends THREE.Group
 			this.percentage += 1;
 			if(this.percentage > 100)
 			{
-				//DO THE THING
+				window.location.href = "GameHub.html";
 				//then reset
-				this.percentage = 0;
+				//this.percentage = 0;
 			}
 		}
 		else
@@ -46,7 +46,7 @@ class SlingRing extends THREE.Group
 			this.orb_msh.material.color.setHex(0xFF0000);
 			if(this.percentage > 0)
 			{
-				this.percentage -= .5;
+				this.percentage -= .25;
 			}
 		}
 		//console.log(this.percentage);

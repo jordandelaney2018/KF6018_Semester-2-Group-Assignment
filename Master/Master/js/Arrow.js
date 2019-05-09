@@ -20,6 +20,12 @@ class Arrow extends THREE.Group
 
 		this.tip_msh.position.z+= length / 1.75;
 		this.tip_msh.rotation.x+= Math.PI/2;
+
+		var collision_geo = new THREE.SphereGeometry(5, 32, 32);
+		var collision_mat = new THREE.MeshBasicMaterial({visible:false});
+
+		this.collision_msh = new THREE.Mesh(collision_geo, collision_mat);
+		this.tip_msh.add(this.collision_msh);
 		
 		//Arrow fletching 
 		var fletch_geo = new THREE.BoxGeometry( 0.025, 0.1, 0.1 );

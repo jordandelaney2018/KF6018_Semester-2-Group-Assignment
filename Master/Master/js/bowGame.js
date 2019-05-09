@@ -107,7 +107,7 @@ floorLoader.load(
     });
 
 // set up the target vars
-var radiusTop =0.5 , radiusBottom = 0.5, height = 0.5, radialSegments =7;
+var radiusTop =1 , radiusBottom = 1, height = 0.5, radialSegments =7;
 
 function spawnTarget(){
     var geometry = new THREE.CylinderGeometry( radiusTop, radiusBottom, height, radialSegments );
@@ -130,9 +130,9 @@ function spawnTarget(){
                 }
 
                 if(i == 4){
-                    target[i].position.x = 4;
+                    target[i].position.x = 0;
                     target[i].position.y = 1;
-                    target[i].position.z = -10;
+                    target[i].position.z = -3;
                 }
             }
 
@@ -301,6 +301,83 @@ rightShoulder_msh.add(quiver_msh);
 quiver_msh.position.y -= 0.1;
 quiver_msh.position.z += 0.1;
 
+//Node spheres
+//Hands
+var node_geo = new THREE.SphereGeometry(0.1, 18, 18);
+var node_mat = new THREE.MeshPhongMaterial( { color: 0xCCCCCC } ); 
+
+//Head
+var head_geo = new THREE.SphereGeometry(0.1, 18, 18);
+var head_mat = new THREE.MeshPhongMaterial( { color: 0xffff00 } ); 
+var head_msh = new THREE.Mesh(node_geo, node_mat);
+scene.add(head_msh);
+
+//Pelvis
+var pelvis_geo = new THREE.SphereGeometry(0.1, 18,18);
+var pelvis_mat = new THREE.MeshPhongMaterial( { color: 0xffff00 } ); 
+var pelvis_msh = new THREE.Mesh(pelvis_geo, pelvis_mat);
+scene.add(pelvis_msh);
+
+//Eyes
+var eye_geo = new THREE.SphereGeometry(0.025, 18, 18);
+var eye_mat = new THREE.MeshPhongMaterial( { color: 0x000000 } ); 
+
+//Left Eye
+var eyeL_msh = new THREE.Mesh(eye_geo, eye_mat);
+head_msh.add(eyeL_msh);
+eyeL_msh.position.x -= 0.05;
+eyeL_msh.position.y += 0.025;
+eyeL_msh.position.z -= 0.075;
+
+//Right Eye
+var eyeR_msh = new THREE.Mesh(eye_geo, eye_mat);
+head_msh.add(eyeR_msh);
+eyeR_msh.position.x += 0.05;
+eyeR_msh.position.y += 0.025;
+eyeR_msh.position.z -= 0.075;
+
+//Skeleton lines
+var skeleton_mat = new THREE.LineBasicMaterial({color: 0xff9999});
+var LeftArm_geo = new THREE.Geometry();
+LeftArm_geo.vertices.push(new THREE.Vector3(0,0,0));
+LeftArm_geo.vertices.push(new THREE.Vector3(0,1,0));
+LeftArm_geo.vertices.push(new THREE.Vector3(0,1,1));
+LeftArm_geo.vertices.push(new THREE.Vector3(0,2,2));
+var LeftArm = new THREE.Line(LeftArm_geo, skeleton_mat);
+scene.add(LeftArm);
+
+var RightArm_geo = new THREE.Geometry();
+RightArm_geo.vertices.push(new THREE.Vector3(0,0,0));
+RightArm_geo.vertices.push(new THREE.Vector3(0,1,0));
+RightArm_geo.vertices.push(new THREE.Vector3(0,1,1));
+RightArm_geo.vertices.push(new THREE.Vector3(0,2,2));
+var RightArm = new THREE.Line(RightArm_geo, skeleton_mat);
+scene.add(RightArm);
+
+var Spine_geo = new THREE.Geometry();
+Spine_geo.vertices.push(new THREE.Vector3(0,0,0));
+Spine_geo.vertices.push(new THREE.Vector3(0,1,0));
+Spine_geo.vertices.push(new THREE.Vector3(0,1,1));
+Spine_geo.vertices.push(new THREE.Vector3(0,2,2));
+var Spine = new THREE.Line(Spine_geo, skeleton_mat);
+scene.add(Spine);
+
+var LeftLeg_geo = new THREE.Geometry();
+LeftLeg_geo.vertices.push(new THREE.Vector3(0,0,0));
+LeftLeg_geo.vertices.push(new THREE.Vector3(0,1,0));
+LeftLeg_geo.vertices.push(new THREE.Vector3(0,1,1));
+LeftLeg_geo.vertices.push(new THREE.Vector3(0,2,2));
+var LeftLeg = new THREE.Line(LeftLeg_geo, skeleton_mat);
+scene.add(LeftLeg);
+
+var RightLeg_geo = new THREE.Geometry();
+RightLeg_geo.vertices.push(new THREE.Vector3(0,0,0));
+RightLeg_geo.vertices.push(new THREE.Vector3(0,1,0));
+RightLeg_geo.vertices.push(new THREE.Vector3(0,1,1));
+RightLeg_geo.vertices.push(new THREE.Vector3(0,2,2));
+var RightLeg = new THREE.Line(RightLeg_geo, skeleton_mat);
+scene.add(RightLeg);
+
 
 // -------------- Extra Controls and Functions --------------
 // Add mouse/camera controls
@@ -360,13 +437,13 @@ for (var i = 1; i <= 20; i++) {
     distance = Math.sqrt(Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2));
     G[i] = distance + G[i - 1];
 
-    console.log(G[i]);
+    //console.log(G[i]);
 }
 // normalize arc length
 for (var i = 1; i <= 20; i++) {
     G[i] /= G[20];
 
-    console.log(G[i]);
+    //console.log(G[i]);
 }
 
 function getUbyArcLen(arcLen) {
@@ -386,21 +463,17 @@ function ease(t) {
     return (Math.sin(t * Math.PI - Math.PI / 2) + 1) / 2;
 }
 
-
 // init json array
-var jsonFrm = 0;
+/*var jsonFrm = 0;
 var jsonMotion = null;
-
 //usage:
-readTextFile("archermotion.json", function(text){
+readTextFile("js/archermotion.json", function(text){
     jsonMotion = JSON.parse(text);
     var count = Object.keys(jsonMotion).length;
     //console.log(count);
     jsonFrm = count;
     iFrame = 0;
 });
-
-
 function readTextFile(file, callback) {
     var rawFile = new XMLHttpRequest();
     rawFile.overrideMimeType("application/json");
@@ -411,102 +484,16 @@ function readTextFile(file, callback) {
         }
     }
     rawFile.send(null);
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Kinectron codes starting from here///////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
+}*/
 
-// Initialize kinectron
-kinectron = new Kinectron("192.168.60.56"); // Define and create an instance of kinectron
-kinectron.makeConnection(); // Create connection between remote and application
-kinectron.startTrackedBodies(getBodies); // Start tracked bodies and set callback
-
-// The getBodies callback function: called once every time kinect obtain a frame
-function getBodies(skeleton)
-{
-    meshLH.position.x = skeleton.joints[kinectron.HANDLEFT].cameraX;
-    meshLH.position.y = skeleton.joints[kinectron.HANDLEFT].cameraY;
-    meshLH.position.z = skeleton.joints[kinectron.HANDLEFT].cameraZ;
-    meshRH.position.x = skeleton.joints[kinectron.HANDRIGHT].cameraX;
-    meshRH.position.y = skeleton.joints[kinectron.HANDRIGHT].cameraY;
-    meshRH.position.z = skeleton.joints[kinectron.HANDRIGHT].cameraZ;
-
-    head_msh.position.x = skeleton.joints[kinectron.HEAD].cameraX;
-    head_msh.position.y = skeleton.joints[kinectron.HEAD].cameraY;
-    head_msh.position.z = skeleton.joints[kinectron.HEAD].cameraZ;
-
-    //Left arm
-    //Shoulder
-    leftShoulder_msh.position.x = skeleton.joints[kinectron.SHOULDERLEFT].cameraX;
-    leftShoulder_msh.position.y = skeleton.joints[kinectron.SHOULDERLEFT].cameraY;
-    leftShoulder_msh.position.z = skeleton.joints[kinectron.SHOULDERLEFT].cameraZ;
-
-    LeftArm.geometry.vertices[0].x = skeleton.joints[kinectron.SPINESHOULDER].cameraX;
-    LeftArm.geometry.vertices[0].y = skeleton.joints[kinectron.SPINESHOULDER].cameraY;
-    LeftArm.geometry.vertices[0].z = skeleton.joints[kinectron.SPINESHOULDER].cameraZ;
-
-    LeftArm.geometry.vertices[1].x = skeleton.joints[kinectron.SHOULDERLEFT].cameraX;
-    LeftArm.geometry.vertices[1].y = skeleton.joints[kinectron.SHOULDERLEFT].cameraY;
-    LeftArm.geometry.vertices[1].z = skeleton.joints[kinectron.SHOULDERLEFT].cameraZ;
-
-    LeftArm.geometry.vertices[2].x = skeleton.joints[kinectron.ELBOWLEFT].cameraX;
-    LeftArm.geometry.vertices[2].y = skeleton.joints[kinectron.ELBOWLEFT].cameraY;
-    LeftArm.geometry.vertices[2].z = skeleton.joints[kinectron.ELBOWLEFT].cameraZ;
-
-    LeftArm.geometry.vertices[3].x = skeleton.joints[kinectron.HANDLEFT].cameraX;
-    LeftArm.geometry.vertices[3].y = skeleton.joints[kinectron.HANDLEFT].cameraY;
-    LeftArm.geometry.vertices[3].z = skeleton.joints[kinectron.HANDLEFT].cameraZ;
-    LeftArm.geometry.verticesNeedUpdate = true;
-
-    //Right arm
-    //Shoulder
-    rightShoulder_msh.position.x = skeleton.joints[kinectron.SHOULDERRIGHT].cameraX;
-    rightShoulder_msh.position.y = skeleton.joints[kinectron.SHOULDERRIGHT].cameraY;
-    rightShoulder_msh.position.z = skeleton.joints[kinectron.SHOULDERRIGHT].cameraZ;
-
-    RightArm.geometry.vertices[0].x = skeleton.joints[kinectron.SPINESHOULDER].cameraX;
-    RightArm.geometry.vertices[0].y = skeleton.joints[kinectron.SPINESHOULDER].cameraY;
-    RightArm.geometry.vertices[0].z = skeleton.joints[kinectron.SPINESHOULDER].cameraZ;
-
-    RightArm.geometry.vertices[1].x = skeleton.joints[kinectron.SHOULDERRIGHT].cameraX;
-    RightArm.geometry.vertices[1].y = skeleton.joints[kinectron.SHOULDERRIGHT].cameraY;
-    RightArm.geometry.vertices[1].z = skeleton.joints[kinectron.SHOULDERRIGHT].cameraZ;
-
-    RightArm.geometry.vertices[2].x = skeleton.joints[kinectron.ELBOWRIGHT].cameraX;
-    RightArm.geometry.vertices[2].y = skeleton.joints[kinectron.ELBOWRIGHT].cameraY;
-    RightArm.geometry.vertices[2].z = skeleton.joints[kinectron.ELBOWRIGHT].cameraZ;
-
-    RightArm.geometry.vertices[3].x = skeleton.joints[kinectron.HANDRIGHT].cameraX;
-    RightArm.geometry.vertices[3].y = skeleton.joints[kinectron.HANDRIGHT].cameraY;
-    RightArm.geometry.vertices[3].z = skeleton.joints[kinectron.HANDRIGHT].cameraZ;
-    RightArm.geometry.verticesNeedUpdate = true;
-
-    //Spine
-    Spine.geometry.vertices[0].x = skeleton.joints[kinectron.HEAD].cameraX;
-    Spine.geometry.vertices[0].y = skeleton.joints[kinectron.HEAD].cameraY;
-    Spine.geometry.vertices[0].z = skeleton.joints[kinectron.HEAD].cameraZ;
-
-    Spine.geometry.vertices[1].x = skeleton.joints[kinectron.NECK].cameraX;
-    Spine.geometry.vertices[1].y = skeleton.joints[kinectron.NECK].cameraY;
-    Spine.geometry.vertices[1].z = skeleton.joints[kinectron.NECK].cameraZ;
-
-    Spine.geometry.vertices[2].x = skeleton.joints[kinectron.SPINEMID].cameraX;
-    Spine.geometry.vertices[2].y = skeleton.joints[kinectron.SPINEMID].cameraY;
-    Spine.geometry.vertices[2].z = skeleton.joints[kinectron.SPINEMID].cameraZ;
-
-    Spine.geometry.vertices[3].x = skeleton.joints[kinectron.SPINEBASE].cameraX;
-    Spine.geometry.vertices[3].y = skeleton.joints[kinectron.SPINEBASE].cameraY;
-    Spine.geometry.vertices[3].z = skeleton.joints[kinectron.SPINEBASE].cameraZ;
-    Spine.geometry.verticesNeedUpdate = true;
-
-    pelvis_msh.position.x = skeleton.joints[kinectron.SPINEBASE].cameraX;
-    pelvis_msh.position.y = skeleton.joints[kinectron.SPINEBASE].cameraY;
-    pelvis_msh.position.z = skeleton.joints[kinectron.SPINEBASE].cameraZ;
-}
 var score =0;
 var iFrame = 0;
 var arrows = []; //0 = latest arrow
 var state = 0; //0 = no arrow, 1 = equipped, 2 = nocked
+
+kinectron = new Kinectron("192.168.60.56"); // Define and create an instance of kinectron
+kinectron.makeConnection(); // Create connection between remote and application
+kinectron.startTrackedBodies(getBodies); // Start tracked bodies and set callback
 
 // -------------- Animate Function --------------
 function animate() {
@@ -524,7 +511,7 @@ function animate() {
     var steps = 1500;
     var u = iFrame / steps;
     if (u <= 1) {
-        console.log(u);
+        //console.log(u);
     } else if (u >= 1) {
         u = 0;
         iFrame = 0;
@@ -549,126 +536,228 @@ function animate() {
 
 
     /*JSON*/
-    if (jsonFrm>0) {
+    /*if (jsonFrm>0) {
         getBodies(jsonMotion[iFrame]);
         iFrame ++;
         iFrame = iFrame % jsonFrm;   //Keep looping the frame
-    }
+    }*/
+	
 
-    //Skip first 30 frames
-    if(iFrame > 30)
-    {
-        /*SLINGRING*/
-        slingRing.contact(meshRH);
-        if(slingRing.percentage >= 100)
-        {
-            //Back to main menu
-            meshLH.material.color.setHex(0x0000FF);
-        }
+    
+	/*SLINGRING*/
+	slingRing.contact(meshRH);
+	console.log(slingRing.percentage)
+	if(slingRing.percentage >= 100)
+	{
+		//Back to main menu
+		window.location.href = "GameHub.html";
+	}
 
-        /*ARCHER*/
-        //Shoulder contact
-        if(collision(meshRH, rightShoulder_msh))
-        {
-            //If no arrow is equipped
-            if(state == 0)
-            {
-                arrows.unshift(new Arrow(0.5)); //Add new arrow at #0
-                arrows[0].equip(meshRH);//Attach new arrow to hand
-                state = 1
+	/*ARCHER*/
+	//Shoulder contact
+	if(collision(meshRH, rightShoulder_msh))
+	{
+		//If no arrow is equipped
+		if(state == 0)
+		{
+			arrows.unshift(new Arrow(0.5)); //Add new arrow at #0
+			arrows[0].equip(meshRH);//Attach new arrow to hand
+			state = 1
 
-                //Cull old arrows
-                if(arrows.length> 5)
-                {
-                    arrows.pop();
-                }
-            }
-            //If currently equipped arrow is nocked, shoot it
-            else if(state == 2)
-            {
-                arrows[0].shoot();
-                state = 0;
-                bow.reset();
-            }
-        }
+			//Cull old arrows
+			if(arrows.length> 5)
+			{
+				arrows.pop();
+			}
+		}
+		//If currently equipped arrow is nocked, shoot it
+		else if(state == 2)
+		{
+			arrows[0].shoot();
+			state = 0;
+			bow.reset();
+		}
+	}
 
-        //Check hand contact, nock arrow
-        if(collision(meshRH, meshLH))
-        {
-            if(arrows.length > 0 && state < 2)
-            {
-                arrows[0].nock(meshLH);
-                state = 2;
-            }
-        }
+	//Check hand contact, nock arrow
+	if(collision(meshRH, meshLH))
+	{
+		if(arrows.length > 0 && state < 2)
+		{
+			arrows[0].nock(meshLH);
+			state = 2;
+		}
+	}
 
-        //Arrow animation
-        //  length/rotation if nocked,
-        //  movement if shot
-        for(let i =0; i < arrows.length; i++)
-        {
-            if(arrows[i] !=null)
-            {
-                arrows[i].animate();
-            }
-        }
+	//Arrow animation
+	//  length/rotation if nocked,
+	//  movement if shot
+	for(let i =0; i < arrows.length; i++)
+	{
+		if(arrows[i] !=null)
+		{
+			arrows[i].animate();
+		}
+	}
 
-        if(state == 2)
-        {
-            if(!bow.nocked)
-            {
-                bow.nock(meshRH);
-            }
-            bow.animate();
-        }
-    }
-
-    //Check hand contact
-    if(collision(meshRH, meshLH))
-    {
-        //Attach arrow to both hands?
-    }
-
-    /*
+	if(state == 2)
+	{
+		if(!bow.nocked)
+		{
+			bow.nock(meshRH);
+		}
+		bow.animate();
+	}
+    
     // Target Arrow Collisions
     // Moving Targets Give More Points
-    if (collision (target[0],tempArrow) || collision (target[1],tempArrow)||collision (target[2],tempArrow) && tempArrow.active == true){
-
-        // Increase the score and Print to UI
-        score = score + 2;
-        document.getElementById("displayScore").innerHTML = "Score:"+score;
-
-        //Set Arrow to stop when it hits target, set active to false so that it stops registering collision
-        tempArrow.velocity = 0;
-        tempArrow.active = false;
-        if (collision (target[0],tempArrow)){
-            // Set temp arrows new parent to be target so that the arrow moves with the target (emulating arrow sticking in target)
-            tempArrow.parent = target[0];
-        }
-        else if (collision (target[1],tempArrow)){
-            tempArrow.parent = target[1];
-        }
-        else if(collision (target[2],tempArrow)){
-            tempArrow.parent = target[2];
-        }
-
+    for(let i = 0; i<arrows.length; i++)
+    {
+		if (collision (target[0],arrows[i].collision_msh) || collision (target[1],arrows[i].collision_msh)||collision (target[2],arrows[i].collision_msh) && arrows[i].active == true){
+			// Increase the score and Print to UI
+			score = score + 2;
+			document.getElementById("displayScore").innerHTML = "Score:"+score;
+			//Set Arrow to stop when it hits target, set active to false so that it stops registering collision
+			arrows[i].velocity = new THREE.Vector3(0,0,0);
+			arrows[i].active = false;
+			if (collision (target[0],arrows[i].collision_msh)){
+				// Set temp arrows new parent to be target so that the arrow moves with the target (emulating arrow sticking in target)
+				arrows[i].parent = target[0];
+			}
+			else if (collision (target[1],arrows[i].collision_msh)){
+				arrows[i].parent = target[1];
+			}
+			else if(collision (target[2],arrows[i].collision_msh)){
+				arrows[i].parent = target[2];
+			}
+		}
+		if (collision (target[3],arrows[i].collision_msh) || (target[4],arrows[i].collision_msh)&& arrows[i].active == true){
+			// Increase the score and Print to UI
+			score = score + 1;
+			document.getElementById("displayScore").innerHTML = "Score:"+score;
+			//Set Arrow to stop when it hits target, set active to false so that it stops registering collision
+			arrows[i].velocity = new THREE.Vector3(0,0,0);;
+			arrows[i].active = false;
+		}
     }
 
-    if (collision (target[3],tempArrow) || (target[4],tempArrow)&& tempArrow.active == true){
-
-        // Increase the score and Print to UI
-        score = score + 1;
-        document.getElementById("displayScore").innerHTML = "Score:"+score;
-
-        //Set Arrow to stop when it hits target, set active to false so that it stops registering collision
-        tempArrow.velocity = 0;
-        tempArrow.active = false;
-    }
-
-*/
     iFrame++;
 
     renderer.render(scene, camera);
 }
 
 animate();
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Kinectron codes starting from here///////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Initialize kinectron
+
+
+// The getBodies callback function: called once every time kinect obtain a frame
+function getBodies(skeleton)
+{
+	let offset = 1;
+    meshLH.position.x = skeleton.joints[kinectron.HANDLEFT].cameraX;
+    meshLH.position.y = skeleton.joints[kinectron.HANDLEFT].cameraY+offset;
+    meshLH.position.z = skeleton.joints[kinectron.HANDLEFT].cameraZ;
+    meshRH.position.x = skeleton.joints[kinectron.HANDRIGHT].cameraX;
+    meshRH.position.y = skeleton.joints[kinectron.HANDRIGHT].cameraY+offset;
+    meshRH.position.z = skeleton.joints[kinectron.HANDRIGHT].cameraZ;
+
+    head_msh.position.x = skeleton.joints[kinectron.HEAD].cameraX;
+    head_msh.position.y = skeleton.joints[kinectron.HEAD].cameraY+offset;
+    head_msh.position.z = skeleton.joints[kinectron.HEAD].cameraZ;
+
+    //Left arm
+    //Shoulder
+    leftShoulder_msh.position.x = skeleton.joints[kinectron.SHOULDERLEFT].cameraX;
+    leftShoulder_msh.position.y = skeleton.joints[kinectron.SHOULDERLEFT].cameraY+offset;
+    leftShoulder_msh.position.z = skeleton.joints[kinectron.SHOULDERLEFT].cameraZ;
+
+    LeftArm.geometry.vertices[0].x = skeleton.joints[kinectron.SPINESHOULDER].cameraX;
+    LeftArm.geometry.vertices[0].y = skeleton.joints[kinectron.SPINESHOULDER].cameraY+offset;
+    LeftArm.geometry.vertices[0].z = skeleton.joints[kinectron.SPINESHOULDER].cameraZ;
+
+    LeftArm.geometry.vertices[1].x = skeleton.joints[kinectron.SHOULDERLEFT].cameraX;
+    LeftArm.geometry.vertices[1].y = skeleton.joints[kinectron.SHOULDERLEFT].cameraY+offset;
+    LeftArm.geometry.vertices[1].z = skeleton.joints[kinectron.SHOULDERLEFT].cameraZ;
+
+    LeftArm.geometry.vertices[2].x = skeleton.joints[kinectron.ELBOWLEFT].cameraX;
+    LeftArm.geometry.vertices[2].y = skeleton.joints[kinectron.ELBOWLEFT].cameraY+offset;
+    LeftArm.geometry.vertices[2].z = skeleton.joints[kinectron.ELBOWLEFT].cameraZ;
+
+    LeftArm.geometry.vertices[3].x = skeleton.joints[kinectron.HANDLEFT].cameraX;
+    LeftArm.geometry.vertices[3].y = skeleton.joints[kinectron.HANDLEFT].cameraY+offset;
+    LeftArm.geometry.vertices[3].z = skeleton.joints[kinectron.HANDLEFT].cameraZ;
+    LeftArm.geometry.verticesNeedUpdate = true;
+
+    //Right arm
+    //Shoulder
+    rightShoulder_msh.position.x = skeleton.joints[kinectron.SHOULDERRIGHT].cameraX;
+    rightShoulder_msh.position.y = skeleton.joints[kinectron.SHOULDERRIGHT].cameraY+offset;
+    rightShoulder_msh.position.z = skeleton.joints[kinectron.SHOULDERRIGHT].cameraZ;
+
+    RightArm.geometry.vertices[0].x = skeleton.joints[kinectron.SPINESHOULDER].cameraX;
+    RightArm.geometry.vertices[0].y = skeleton.joints[kinectron.SPINESHOULDER].cameraY+offset;
+    RightArm.geometry.vertices[0].z = skeleton.joints[kinectron.SPINESHOULDER].cameraZ;
+
+    RightArm.geometry.vertices[1].x = skeleton.joints[kinectron.SHOULDERRIGHT].cameraX;
+    RightArm.geometry.vertices[1].y = skeleton.joints[kinectron.SHOULDERRIGHT].cameraY+offset;
+    RightArm.geometry.vertices[1].z = skeleton.joints[kinectron.SHOULDERRIGHT].cameraZ;
+
+    RightArm.geometry.vertices[2].x = skeleton.joints[kinectron.ELBOWRIGHT].cameraX;
+    RightArm.geometry.vertices[2].y = skeleton.joints[kinectron.ELBOWRIGHT].cameraY+offset;
+    RightArm.geometry.vertices[2].z = skeleton.joints[kinectron.ELBOWRIGHT].cameraZ;
+
+    RightArm.geometry.vertices[3].x = skeleton.joints[kinectron.HANDRIGHT].cameraX;
+    RightArm.geometry.vertices[3].y = skeleton.joints[kinectron.HANDRIGHT].cameraY+offset;
+    RightArm.geometry.vertices[3].z = skeleton.joints[kinectron.HANDRIGHT].cameraZ;
+    RightArm.geometry.verticesNeedUpdate = true;
+
+    //Spine
+    Spine.geometry.vertices[0].x = skeleton.joints[kinectron.HEAD].cameraX;
+    Spine.geometry.vertices[0].y = skeleton.joints[kinectron.HEAD].cameraY+offset;
+    Spine.geometry.vertices[0].z = skeleton.joints[kinectron.HEAD].cameraZ;
+
+    Spine.geometry.vertices[1].x = skeleton.joints[kinectron.NECK].cameraX;
+    Spine.geometry.vertices[1].y = skeleton.joints[kinectron.NECK].cameraY+offset;
+    Spine.geometry.vertices[1].z = skeleton.joints[kinectron.NECK].cameraZ;
+
+    Spine.geometry.vertices[2].x = skeleton.joints[kinectron.SPINEMID].cameraX;
+    Spine.geometry.vertices[2].y = skeleton.joints[kinectron.SPINEMID].cameraY+offset;
+    Spine.geometry.vertices[2].z = skeleton.joints[kinectron.SPINEMID].cameraZ;
+
+    Spine.geometry.vertices[3].x = skeleton.joints[kinectron.SPINEBASE].cameraX;
+    Spine.geometry.vertices[3].y = skeleton.joints[kinectron.SPINEBASE].cameraY+offset;
+    Spine.geometry.vertices[3].z = skeleton.joints[kinectron.SPINEBASE].cameraZ;
+    Spine.geometry.verticesNeedUpdate = true;
+
+    pelvis_msh.position.x = skeleton.joints[kinectron.SPINEBASE].cameraX;
+    pelvis_msh.position.y = skeleton.joints[kinectron.SPINEBASE].cameraY+offset;
+    pelvis_msh.position.z = skeleton.joints[kinectron.SPINEBASE].cameraZ;
+
+    //Left Leg
+    /*LeftLeg.geometry.vertices[0].x = skeleton.joints[kinectron.HIPLEFT].cameraX;
+	LeftLeg.geometry.vertices[0].y = skeleton.joints[kinectron.HIPLEFT].cameraY+offset;
+	LeftLeg.geometry.vertices[0].z = skeleton.joints[kinectron.HIPLEFT].cameraZ;
+	LeftLeg.geometry.vertices[1].x = skeleton.joints[kinectron.KNEELEFT].cameraX;
+	LeftLeg.geometry.vertices[1].y = skeleton.joints[kinectron.KNEELEFT].cameraY+offset;
+	LeftLeg.geometry.vertices[1].z = skeleton.joints[kinectron.KNEELEFT].cameraZ;
+	LeftLeg.geometry.vertices[2].x = skeleton.joints[kinectron.ANKLELEFT].cameraX;
+	LeftLeg.geometry.vertices[2].y = skeleton.joints[kinectron.ANKLELEFT].cameraY+offset;
+	LeftLeg.geometry.vertices[2].z = skeleton.joints[kinectron.ANKLELEFT].cameraZ;
+	LeftLeg.geometry.verticesNeedUpdate = true;
+	//Right Leg
+	RightLeg.geometry.vertices[0].x = skeleton.joints[kinectron.HIPRIGHT].cameraX;
+	RightLeg.geometry.vertices[0].y = skeleton.joints[kinectron.HIPRIGHT].cameraY+offset;
+	RightLeg.geometry.vertices[0].z = skeleton.joints[kinectron.HIPRIGHT].cameraZ;
+	RightLeg.geometry.vertices[1].x = skeleton.joints[kinectron.KNEERIGHT].cameraX;
+	RightLeg.geometry.vertices[1].y = skeleton.joints[kinectron.KNEERIGHT].cameraY+offset;
+	RightLeg.geometry.vertices[1].z = skeleton.joints[kinectron.KNEERIGHT].cameraZ;
+	RightLeg.geometry.vertices[2].x = skeleton.joints[kinectron.ANKLERIGHT].cameraX;
+	RightLeg.geometry.vertices[2].y = skeleton.joints[kinectron.ANKLERIGHT].cameraY+offset;
+	RightLeg.geometry.vertices[2].z = skeleton.joints[kinectron.ANKLERIGHT].cameraZ;
+	RightLeg.geometry.verticesNeedUpdate = true;*/
+}
