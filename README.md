@@ -1,14 +1,27 @@
 # KF6018_A2_w16015149_w16019711_w16007006_w14015821
 
 ## Instructions
-* Hub Area, move hand onto the position of the balls to select a game to play (The instructions are also links to the pages to help with testing)
-* Bow Page, (Please Note the target placed closer to you for testing the collision)
-* Bowl Page,
-* Explison Page, 
-
+* Hub Area
+  * Move hand onto the position of the balls to select a game to play
+  * The instructions are also links to the pages to help with testing)
+* Archery Game
+  * Bow is attached to your left hand
+  * Touch your right shoulder with your right hand to get a new arrow
+  * Touch your hands together to 'nock' the arrow
+  * Touch your right shoulder again to fire
+  * **Please Note:** The target placed closer to you is for easier collision testing
+* Bowling Game
+  * Close hands to shoot barrage of balls to knock over the objects
+  * Once hands close the game will count down, and once the countdown is hit the game will allow you to reset
+  * Clap to reset game
+  * Use mouse click to go back to main menu
+* Explosion Game
+  *
 
 ## Rendering Elements
 
+* Trees, floor and targets all have textures
+* Rainfall in hub area & archery game
 * 
 
 ## Motion Sensing Features
@@ -17,10 +30,12 @@
 * Detects hand close
 * Detects hand clapping
 * Detects User touching Menu Spheres
+* Detects contact between hand and shoulder (get new arrow, and shoot)
 
 ## User Performance Analysis
 
 * Score updates when target is hit
+* User is teleported back to the hub world after successful use of sling-ring
 
 ## Visual Feedback
 
@@ -35,7 +50,7 @@
 * Moving targets using interpolation animation
 * Target collision, including score updates and arrows sticking into targets
 * Hub area which connects games together
-* Ui Features on hub area for insturctions and to link the features together
+* UI Features on hub area for insturctions and to link the features together
 * Scene Setup, Models and Particles 
 
 ### Cuthbert Mutumbwa 16019711
@@ -52,8 +67,8 @@
 
 * Archery minigame
   * Player can shoot targets with a bow&arrow
-* Sling ring (Dr Strange)
-  * Player can use circular motion to signal they want to return to the main menu
+  * Sling ring (Dr Strange)
+  * Player can use circular motion to signal they want to return to the main menu (move right hand clockwise around left hand)
 
 ### Luke Phillips 14015821
 
