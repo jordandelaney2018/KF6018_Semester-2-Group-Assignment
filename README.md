@@ -10,6 +10,7 @@
   * Touch your hands together to 'nock' the arrow
   * Touch your right shoulder again to fire
   * **Please Note:** The target placed closer to you is for easier collision testing
+  * Use slingring to go back to hub world (see proposed features for more info)
 * Bowling Game
   * Close hands to shoot barrage of balls to knock over the objects
   * Once hands close the game will count down, and once the countdown is hit the game will allow you to reset
@@ -67,7 +68,7 @@
 
 * Archery minigame
   * Player can shoot targets with a bow&arrow
-  * Sling ring (Dr Strange)
+* Sling ring (Dr Strange)
   * Player can use circular motion to signal they want to return to the main menu (move right hand clockwise around left hand)
 
 ### Luke Phillips 14015821
