@@ -1,7 +1,7 @@
 # KF6018_A2_w16015149_w16019711_w16007006_w14015821
 
 ## Instructions
-* Hub Area, move hand onto the position of the balls to select a game to play
+* Hub Area, move hand onto the position of the balls to select a game to play (The instructions are also links to the pages to help with testing)
 * Bow Page, (Please Note the target placed closer to you for testing the collision)
 * Bowl Page,
 * Explison Page, 
