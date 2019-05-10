@@ -3,29 +3,29 @@ var live = true;
 function collision(meshA, meshB)
 {
 
-	var meshApos = meshA.getWorldPosition(new THREE.Vector3());
-	var meshBpos = meshB.getWorldPosition(new THREE.Vector3());
+    var meshApos = meshA.getWorldPosition(new THREE.Vector3());
+    var meshBpos = meshB.getWorldPosition(new THREE.Vector3());
 
-	var distance = Math.sqrt(Math.pow(meshApos.x - meshBpos.x, 2)
-           			       + Math.pow(meshApos.y - meshBpos.y, 2)
-           			       + Math.pow(meshApos.z - meshBpos.z, 2));
-	var sumRadius = meshA.geometry.parameters.radius + meshB.geometry.parameters.radius;	
+    var distance = Math.sqrt(Math.pow(meshApos.x - meshBpos.x, 2)
+        + Math.pow(meshApos.y - meshBpos.y, 2)
+        + Math.pow(meshApos.z - meshBpos.z, 2));
+    var sumRadius = meshA.geometry.parameters.radius + meshB.geometry.parameters.radius;
 
-	return distance < sumRadius;
+    return distance < sumRadius;
 }
 
 function targetCollision(arrow, target)
 {
 
-	var arrowpos = arrow.getWorldPosition(new THREE.Vector3());
-	var targetpos = target.getWorldPosition(new THREE.Vector3());
-	
-	var distance = Math.sqrt(Math.pow(arrowpos.x - targetpos.x, 2)
-           			       + Math.pow(arrowpos.z - targetpos.z, 2));
-						   
-	var sumRadius = arrow.geometry.parameters.radius + target.geometry.parameters.radius;
+    var arrowpos = arrow.getWorldPosition(new THREE.Vector3());
+    var targetpos = target.getWorldPosition(new THREE.Vector3());
 
-	return distance < sumRadius;
+    var distance = Math.sqrt(Math.pow(arrowpos.x - targetpos.x, 2)
+        + Math.pow(arrowpos.z - targetpos.z, 2));
+
+    var sumRadius = arrow.geometry.parameters.radius + target.geometry.parameters.radius;
+
+    return distance < sumRadius;
 }
 
 // -------------- Initial Setup --------------
@@ -134,13 +134,13 @@ function spawnTarget(){
                 // Place Static targets
                 if(i == 3){
                     target[i].position.x = -4;
-                    target[i].position.y = 1;
+                    target[i].position.y = 2;
                     target[i].position.z = -10;
                 }
 
                 if(i == 4){
                     target[i].position.x = 0;
-                    target[i].position.y = 1;
+                    target[i].position.y = 2;
                     target[i].position.z = -3;
                 }
             }
@@ -184,6 +184,27 @@ function spawnTarget(){
 
     scene.add(legLeftTwo);
     scene.add(legRightTwo);
+
+    var sphereMaterial = new THREE.MeshLambertMaterial(
+        {
+            color: 0x00FF00		//green
+        });
+
+
+    // set up the sphere vars
+     var spheRadius = 1, spheSegments = 16, shpeRings = 16;
+
+     // create a new mesh with sphere geometry -
+     var sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(spheRadius, spheSegments, shpeRings),
+        sphereMaterial);
+    sphere.position.x = -4;
+    sphere.position.y = 2;
+    sphere.position.z = -10;
+
+        scene.add(sphere);
+
+
 }
 // Create House Model for scene
 function makeHouse(){
@@ -313,23 +334,23 @@ quiver_msh.position.z += 0.1;
 //Node spheres
 //Hands
 var node_geo = new THREE.SphereGeometry(0.1, 18, 18);
-var node_mat = new THREE.MeshPhongMaterial( { color: 0xCCCCCC } ); 
+var node_mat = new THREE.MeshPhongMaterial( { color: 0xCCCCCC } );
 
 //Head
 var head_geo = new THREE.SphereGeometry(0.1, 18, 18);
-var head_mat = new THREE.MeshPhongMaterial( { color: 0xffff00 } ); 
+var head_mat = new THREE.MeshPhongMaterial( { color: 0xffff00 } );
 var head_msh = new THREE.Mesh(node_geo, node_mat);
 scene.add(head_msh);
 
 //Pelvis
 var pelvis_geo = new THREE.SphereGeometry(0.1, 18,18);
-var pelvis_mat = new THREE.MeshPhongMaterial( { color: 0xffff00 } ); 
+var pelvis_mat = new THREE.MeshPhongMaterial( { color: 0xffff00 } );
 var pelvis_msh = new THREE.Mesh(pelvis_geo, pelvis_mat);
 scene.add(pelvis_msh);
 
 //Eyes
 var eye_geo = new THREE.SphereGeometry(0.025, 18, 18);
-var eye_mat = new THREE.MeshPhongMaterial( { color: 0x000000 } ); 
+var eye_mat = new THREE.MeshPhongMaterial( { color: 0x000000 } );
 
 //Left Eye
 var eyeL_msh = new THREE.Mesh(eye_geo, eye_mat);
@@ -379,7 +400,6 @@ LeftLeg_geo.vertices.push(new THREE.Vector3(0,1,1));
 LeftLeg_geo.vertices.push(new THREE.Vector3(0,2,2));
 var LeftLeg = new THREE.Line(LeftLeg_geo, skeleton_mat);
 scene.add(LeftLeg);
-
 var RightLeg_geo = new THREE.Geometry();
 RightLeg_geo.vertices.push(new THREE.Vector3(0,0,0));
 RightLeg_geo.vertices.push(new THREE.Vector3(0,1,0));
@@ -478,16 +498,16 @@ function ease(t) {
 
 if(!live)
 {
-	var jsonFrm = 0;
-	var jsonMotion = null;
-	//usage:
-	readTextFile("js/archermotion.json", function(text){
-		jsonMotion = JSON.parse(text);
-		var count = Object.keys(jsonMotion).length;
-		//console.log(count);
-		jsonFrm = count;
-		iFrame = 0;
-	});
+    var jsonFrm = 0;
+    var jsonMotion = null;
+    //usage:
+    readTextFile("js/archermotion.json", function(text){
+        jsonMotion = JSON.parse(text);
+        var count = Object.keys(jsonMotion).length;
+        //console.log(count);
+        jsonFrm = count;
+        iFrame = 0;
+    });
 }
 function readTextFile(file, callback) {
     var rawFile = new XMLHttpRequest();
@@ -509,13 +529,13 @@ var state = 0; //0 = no arrow, 1 = equipped, 2 = nocked
 
 if(live)
 {
-	kinectron = new Kinectron("192.168.60.56"); // Define and create an instance of kinectron
-	kinectron.makeConnection(); // Create connection between remote and application
-	kinectron.startTrackedBodies(getBodies); // Start tracked bodies and set callback
+    kinectron = new Kinectron("192.168.60.56"); // Define and create an instance of kinectron
+    kinectron.makeConnection(); // Create connection between remote and application
+    kinectron.startTrackedBodies(getBodies); // Start tracked bodies and set callback
 }
 else
 {
-	kinectron = new Kinectron();
+    kinectron = new Kinectron();
 }
 
 // -------------- Animate Function --------------
@@ -558,124 +578,124 @@ function animate() {
     target[2].position.z = -8;
 
 
-    	
 
-    
-	/*SLINGRING*/
-	slingRing.contact(meshRH);
-	console.log(slingRing.percentage)
-	if(slingRing.percentage >= 100)
-	{
-		//Back to main menu
-		window.location.href = "GameHub.html";
-	}
 
-	/*ARCHER*/
-	//Shoulder contact
-	if(collision(meshRH, rightShoulder_msh))
-	{
-		//If no arrow is equipped
-		if(state == 0)
-		{
-			arrows.unshift(new Arrow(0.5)); //Add new arrow at #0
-			arrows[0].equip(meshRH);//Attach new arrow to hand
-			state = 1
 
-			//Cull old arrows
-			if(arrows.length> 5)
-			{
-				arrows.pop();
-			}
-		}
-		//If currently equipped arrow is nocked, shoot it
-		else if(state == 2)
-		{
-			arrows[0].shoot();
-			state = 0;
-			bow.reset();
-		}
-	}
+    /*SLINGRING*/
+    slingRing.contact(meshRH);
+    console.log(slingRing.percentage)
+    if(slingRing.percentage >= 100)
+    {
+        //Back to main menu
+        window.location.href = "GameHub.html";
+    }
 
-	//Check hand contact, nock arrow
-	if(collision(meshRH, meshLH))
-	{
-		if(arrows.length > 0 && state < 2)
-		{
-			arrows[0].nock(meshLH);
-			state = 2;
-		}
-	}
+    /*ARCHER*/
+    //Shoulder contact
+    if(collision(meshRH, rightShoulder_msh))
+    {
+        //If no arrow is equipped
+        if(state == 0)
+        {
+            arrows.unshift(new Arrow(0.5)); //Add new arrow at #0
+            arrows[0].equip(meshRH);//Attach new arrow to hand
+            state = 1
 
-	//Arrow animation
-	//  length/rotation if nocked,
-	//  movement if shot
-	for(let i =0; i < arrows.length; i++)
-	{
-		if(arrows[i] !=null)
-		{
-			arrows[i].animate();
-		}
-	}
+            //Cull old arrows
+            if(arrows.length> 5)
+            {
+                arrows.pop();
+            }
+        }
+        //If currently equipped arrow is nocked, shoot it
+        else if(state == 2)
+        {
+            arrows[0].shoot();
+            state = 0;
+            bow.reset();
+        }
+    }
 
-	if(state == 2)
-	{
-		if(!bow.nocked)
-		{
-			bow.nock(meshRH);
-		}
-		bow.animate();
-	}
-    
+    //Check hand contact, nock arrow
+    if(collision(meshRH, meshLH))
+    {
+        if(arrows.length > 0 && state < 2)
+        {
+            arrows[0].nock(meshLH);
+            state = 2;
+        }
+    }
+
+    //Arrow animation
+    //  length/rotation if nocked,
+    //  movement if shot
+    for(let i =0; i < arrows.length; i++)
+    {
+        if(arrows[i] !=null)
+        {
+            arrows[i].animate();
+        }
+    }
+
+    if(state == 2)
+    {
+        if(!bow.nocked)
+        {
+            bow.nock(meshRH);
+        }
+        bow.animate();
+    }
+
     // Target Arrow Collisions
     // Moving Targets Give More Points
     for(let i = 0; i<arrows.length; i++)
     {
-		if ((targetCollision (arrows[i].collision_msh,target[0]) || targetCollision (arrows[i].collision_msh,target[1])||targetCollision (arrows[i].collision_msh,target[2])) && arrows[i].active == true){
-			// Increase the score and Print to UI
-			score = score + 2;
-			document.getElementById("displayScore").innerHTML = "Score:"+score;
-			//Set Arrow to stop when it hits target, set active to false so that it stops registering collision
-			arrows[i].velocity = new THREE.Vector3(0,0,0);
-			arrows[i].active = false;
-			if (targetCollision (arrows[i].collision_msh,target[0])){
-				// Set temp arrows new parent to be target so that the arrow moves with the target (emulating arrow sticking in target)
-				arrows[i].parent = target[0];
-				console.log("Hit target 0");
-			}
-			else if (collision (arrows[i].collision_msh,target[1])){
-				arrows[i].parent = target[1];
-				console.log("Hit target 1");
-			}
-			else if(collision (arrows[i].collision_msh,target[2])){
-				arrows[i].parent = target[2];
-				console.log("Hit target 2");
-			}
-		}
-		if ((targetCollision (arrows[i].collision_msh,target[3]) || targetCollision(arrows[i].collision_msh,target[4]))&& arrows[i].active == true){
-			// Increase the score and Print to UI
-			score = score + 1;
-			document.getElementById("displayScore").innerHTML = "Score:"+score;
-			//Set Arrow to stop when it hits target, set active to false so that it stops registering collision
-			arrows[i].velocity = new THREE.Vector3(0,0,0);;
-			arrows[i].active = false;
-			console.log("Hit target 3 or 4");
-		}
+        if ((targetCollision (arrows[i].collision_msh,target[0]) || targetCollision (arrows[i].collision_msh,target[1])||targetCollision (arrows[i].collision_msh,target[2])) && arrows[i].active == true){
+            // Increase the score and Print to UI
+            score = score + 2;
+            document.getElementById("displayScore").innerHTML = "Score:"+score;
+            //Set Arrow to stop when it hits target, set active to false so that it stops registering collision
+            arrows[i].velocity = new THREE.Vector3(0,0,0);
+            arrows[i].active = false;
+            if (targetCollision (arrows[i].collision_msh,target[0])){
+                // Set temp arrows new parent to be target so that the arrow moves with the target (emulating arrow sticking in target)
+                arrows[i].parent = target[0];
+                console.log("Hit target 0");
+            }
+            else if (collision (arrows[i].collision_msh,target[1])){
+                arrows[i].parent = target[1];
+                console.log("Hit target 1");
+            }
+            else if(collision (arrows[i].collision_msh,target[2])){
+                arrows[i].parent = target[2];
+                console.log("Hit target 2");
+            }
+        }
+        if ((targetCollision (arrows[i].collision_msh,target[3]) || targetCollision(arrows[i].collision_msh,target[4]))&& arrows[i].active == true){
+            // Increase the score and Print to UI
+            score = score + 1;
+            document.getElementById("displayScore").innerHTML = "Score:"+score;
+            //Set Arrow to stop when it hits target, set active to false so that it stops registering collision
+            arrows[i].velocity = new THREE.Vector3(0,0,0);;
+            arrows[i].active = false;
+            console.log("Hit target 3 or 4");
+        }
     }
 
     /*JSON*/
     if (live)
-	{
-		iFrame++;
-	}
-	else
-	{
-		if(jsonFrm>0) 
-		{
-			getBodies(jsonMotion[iFrame]);
-			iFrame ++;
-			iFrame = iFrame % jsonFrm;   //Keep looping the frame
-		}
-    }	
+    {
+        iFrame++;
+    }
+    else
+    {
+        if(jsonFrm>0)
+        {
+            getBodies(jsonMotion[iFrame]);
+            iFrame ++;
+            iFrame = iFrame % jsonFrm;   //Keep looping the frame
+        }
+    }
 
     renderer.render(scene, camera);
 }
@@ -692,7 +712,7 @@ animate();
 // The getBodies callback function: called once every time kinect obtain a frame
 function getBodies(skeleton)
 {
-	let offset = 1;
+    let offset = 1;
     meshLH.position.x = skeleton.joints[kinectron.HANDLEFT].cameraX;
     meshLH.position.y = skeleton.joints[kinectron.HANDLEFT].cameraY+offset;
     meshLH.position.z = skeleton.joints[kinectron.HANDLEFT].cameraZ;
