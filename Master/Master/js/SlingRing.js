@@ -5,18 +5,19 @@ class SlingRing extends THREE.Group
 		super();
 
 		size     = size     || 0.1; //Default if no size provided
-		distance = distance || 0.1; //Default if no distance provided
+		distance = distance || 0.2; //Default if no distance provided
 
 		this.percentage = 0;
 		//Root
 		var root_geo = new THREE.BoxGeometry( 0.05, 0.05, 0.05 );
-		var root_mat = new THREE.MeshBasicMaterial( { color: 0xAAAAAA } );
+		var root_mat = new THREE.MeshBasicMaterial( { color: 0xAAAAAA, visible: false } );
 		this.root_msh = new THREE.Mesh( root_geo, root_mat );
 		this.add(this.root_msh);
+		this.root_msh.position.x += 0.25;
 
 		//Orb   		
 		var orb_geo = new THREE.SphereGeometry(size, 32, 32);
-		var orb_mat = new THREE.MeshPhongMaterial({color: 0xFF0000, visible: false});
+		var orb_mat = new THREE.MeshBasicMaterial({color: 0xFF0000, visible: false});
 		this.orb_msh = new THREE.Mesh( orb_geo, orb_mat ); //use this for public
 		this.root_msh.add(this.orb_msh);
 		this.orb_msh.position.x += distance;

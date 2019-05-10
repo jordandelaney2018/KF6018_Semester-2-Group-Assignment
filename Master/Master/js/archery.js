@@ -1,3 +1,4 @@
+var live = false;
 // Scene
 var scene = new THREE.Scene();
 
@@ -75,17 +76,21 @@ quiver_msh.position.z += 0.1;
 
 
 // init json array
-var jsonFrm = 0;
-var jsonMotion = null;
+if(!live)
+{
+	var jsonFrm = 0;
+	var jsonMotion = null;
 
-//usage:
-readTextFile("archermotion.json", function(text){
-    jsonMotion = JSON.parse(text);
-  	var count = Object.keys(jsonMotion).length;
-  	//console.log(count);
-  	jsonFrm = count;
-  	iFrame = 0;
-});
+	//usage:
+	readTextFile("archermotion.json", function(text){
+		jsonMotion = JSON.parse(text);
+		var count = Object.keys(jsonMotion).length;
+		var count = Object.keys(jsonMotion).length;
+		//console.log(count);
+		jsonFrm = count;
+		iFrame = 0;
+	});
+}
 
 
 function readTextFile(file, callback) {
@@ -104,9 +109,16 @@ function readTextFile(file, callback) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Initialize kinectron
-kinectron = new Kinectron(); // Define and create an instance of kinectron
-//kinectron.makeConnection(); // Create connection between remote and application
-//kinectron.startTrackedBodies(getBodies); // Start tracked bodies and set callback
+if(live)
+{
+	kinectron = new Kinectron("192.168.60.56"); // Define and create an instance of kinectron
+	kinectron.makeConnection(); // Create connection between remote and application
+	kinectron.startTrackedBodies(getBodies); // Start tracked bodies and set callback
+}
+else
+{
+	kinectron = new Kinectron(); // Define and create an instance of kinectron
+}
 
 //Node spheres
 //Hands
@@ -180,80 +192,77 @@ function animate()
 	requestAnimationFrame(animate);
 
 	/*JSON*/
-	if (jsonFrm>0) {
+	if (!live && jsonFrm>0) {
 		getBodies(jsonMotion[iFrame]);
 		iFrame ++;
 		iFrame = iFrame % jsonFrm;   //Keep looping the frame
 	}
+	
 
-	//Skip first 30 frames	
-	if(iFrame > 30)
+	
+	/*SLINGRING*/
+	slingRing.contact(meshRH);
+	if(slingRing.percentage >= 100)
 	{
-		/*SLINGRING*/
-		slingRing.contact(meshRH);
-		if(slingRing.percentage >= 100)
-		{
-			//Back to main menu
-			meshLH.material.color.setHex(0x0000FF);
-		}
+		//Back to main menu
+		meshLH.material.color.setHex(0x0000FF);
+	}
 
-		/*ARCHER*/
-		//Shoulder contact
-		if(collision(meshRH, rightShoulder_msh))
+	/*ARCHER*/
+	//Shoulder contact
+	if(collision(meshRH, rightShoulder_msh))
+	{
+		//If no arrow is equipped
+		if(state == 0)
 		{
-			//If no arrow is equipped
-			if(state == 0)
-			{
-				arrows.unshift(new Arrow(0.5)); //Add new arrow at #0
-				arrows[0].equip(meshRH);//Attach new arrow to hand
-				state = 1
+			arrows.unshift(new Arrow(0.5)); //Add new arrow at #0
+			arrows[0].equip(meshRH);//Attach new arrow to hand
+			state = 1
 
-				//Cull old arrows
-				if(arrows.length> 5)
-				{
-					arrows.pop();
-				}
-			}
-			//If currently equipped arrow is nocked, shoot it
-			else if(state == 2)
+			//Cull old arrows
+			if(arrows.length> 5)
 			{
-				arrows[0].shoot();
-				state = 0;
-				bow.reset();
+				arrows.pop();
 			}
 		}
-
-		//Check hand contact, nock arrow
-		if(collision(meshRH, meshLH))
+		//If currently equipped arrow is nocked, shoot it
+		else if(state == 2)
 		{
-			if(arrows.length > 0 && state < 2)
-			{
-				arrows[0].nock(meshLH);
-				state = 2;
-			}
-		}
-
-		//Arrow animation 
-		//  length/rotation if nocked,
-		//  movement if shot
-		for(let i =0; i < arrows.length; i++)
-		{
-			if(arrows[i] !=null)
-			{
-				arrows[i].animate();
-			}
-		}
-
-		if(state == 2)
-		{
-			if(!bow.nocked)
-			{
-				bow.nock(meshRH);
-			}
-			bow.animate();
+			arrows[0].shoot();
+			state = 0;
+			bow.reset();
 		}
 	}
 
+	//Check hand contact, nock arrow
+	if(collision(meshRH, meshLH))
+	{
+		if(arrows.length > 0 && state < 2)
+		{
+			arrows[0].nock(meshLH);
+			state = 2;
+		}
+	}
+
+	//Arrow animation 
+	//  length/rotation if nocked,
+	//  movement if shot
+	for(let i =0; i < arrows.length; i++)
+	{
+		if(arrows[i] !=null)
+		{
+			arrows[i].animate();
+		}
+	}
+
+	if(state == 2)
+	{
+		if(!bow.nocked)
+		{
+			bow.nock(meshRH);
+		}
+		bow.animate();
+	}
 	renderer.render(scene, camera);
 }
 animate();

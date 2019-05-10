@@ -21,8 +21,8 @@ class Arrow extends THREE.Group
 		this.tip_msh.position.z+= length / 1.75;
 		this.tip_msh.rotation.x+= Math.PI/2;
 
-		var collision_geo = new THREE.SphereGeometry(5, 32, 32);
-		var collision_mat = new THREE.MeshBasicMaterial({visible:false});
+		var collision_geo = new THREE.SphereGeometry(0.1, 32, 32);
+		var collision_mat = new THREE.MeshBasicMaterial({color: 0xFF0000, visible:true});
 
 		this.collision_msh = new THREE.Mesh(collision_geo, collision_mat);
 		this.tip_msh.add(this.collision_msh);
@@ -125,7 +125,7 @@ class Arrow extends THREE.Group
 				scene.remove(this);
 				delete this;
 			}
-			else if(!this.equipped && !this.nocked)
+			else if(!this.equipped && !this.nocked && this.active)
 			{	
 				//Update position			
 				this.position.x += this.velocity.x;
