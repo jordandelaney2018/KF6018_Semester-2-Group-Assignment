@@ -17,13 +17,14 @@
   * Clap to reset game
   * Use mouse click to go back to main menu
 * Explosion Game
-  *
+  * 
 
 ## Rendering Elements
 
 * Trees, floor and targets all have textures
-* Rainfall in hub area & archery game
-* 
+* Rainfall in hub world & archery game
+* Fog effect in hub world & archery game
+* Particle Effects on explosions (explosive minigame)
 
 ## Motion Sensing Features
 
@@ -73,4 +74,6 @@
 
 ### Luke Phillips 14015821
 
-* 
+* Explosion minigame
+  * Player can throw explosives
+  * Physics is simulated
