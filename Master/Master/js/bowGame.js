@@ -1,4 +1,4 @@
-var live = true;
+var live = false;
 
 function collision(meshA, meshB)
 {
@@ -117,7 +117,9 @@ floorLoader.load(
 
 // set up the target vars
 var radiusTop =1 , radiusBottom = 1, height = 0.5, radialSegments =7;
-
+// set up the sphere vars
+ var spheRadius = 1, spheSegments = 16, shpeRings = 16;
+var targetSphere = [];
 function spawnTarget(){
     var geometry = new THREE.CylinderGeometry( radiusTop, radiusBottom, height, radialSegments );
     var targetLoader = new THREE.TextureLoader();
@@ -143,7 +145,21 @@ function spawnTarget(){
                     target[i].position.y = 2;
                     target[i].position.z = -3;
                 }
-            }
+				var sphereMaterial = new THREE.MeshLambertMaterial(
+        {
+            color: 0x00FF00, visible: false		//green
+        });
+
+
+    
+
+				// create a new mesh with sphere geometry -
+				targetSphere[i] = new THREE.Mesh(
+					new THREE.SphereGeometry(spheRadius, spheSegments, shpeRings),
+					sphereMaterial);
+				target[i].add(targetSphere[i]);
+				targetSphere[i].position.y +=0.5;
+			}
 
         });
     //legs for static targets
@@ -151,7 +167,7 @@ function spawnTarget(){
         {
             color: 0x654321
         });
-    var legGeom = new THREE.CylinderGeometry( 0.1, 0.1, 1.5, 20 );
+    var legGeom = new THREE.CylinderGeometry( 0.1, 0.1, 3, 20 );
 
     //Meshes
     var legLeftOne = new THREE.Mesh(legGeom, legMat);
@@ -168,14 +184,14 @@ function spawnTarget(){
     legRightTwo.rotation.z = -10;
 
     //Position
-    legLeftOne.position.x  =  0.5;
+    legLeftOne.position.x  =  1;
     legLeftOne.position.z  = -3;
-    legRightOne.position.x = -0.5;
+    legRightOne.position.x = -1;
     legRightOne.position.z = -3;
 
-    legLeftTwo.position.x  = -3.5;
+    legLeftTwo.position.x  = -3;
     legLeftTwo.position.z  = -10;
-    legRightTwo.position.x = -4.5;
+    legRightTwo.position.x = -5;
     legRightTwo.position.z = -10;
 
     //Add to Scene
@@ -185,25 +201,7 @@ function spawnTarget(){
     scene.add(legLeftTwo);
     scene.add(legRightTwo);
 
-    var sphereMaterial = new THREE.MeshLambertMaterial(
-        {
-            color: 0x00FF00		//green
-        });
-
-
-    // set up the sphere vars
-     var spheRadius = 1, spheSegments = 16, shpeRings = 16;
-
-     // create a new mesh with sphere geometry -
-     var sphere = new THREE.Mesh(
-        new THREE.SphereGeometry(spheRadius, spheSegments, shpeRings),
-        sphereMaterial);
-    sphere.position.x = -4;
-    sphere.position.y = 2;
-    sphere.position.z = -10;
-
-        scene.add(sphere);
-
+    
 
 }
 // Create House Model for scene
@@ -650,7 +648,7 @@ function animate() {
     // Moving Targets Give More Points
     for(let i = 0; i<arrows.length; i++)
     {
-        if ((targetCollision (arrows[i].collision_msh,target[0]) || targetCollision (arrows[i].collision_msh,target[1])||targetCollision (arrows[i].collision_msh,target[2])) && arrows[i].active == true){
+        if ((collision(arrows[i].collision_msh,targetSphere[0]) || collision (arrows[i].collision_msh,targetSphere[1])||collision (arrows[i].collision_msh,targetSphere[2])) && arrows[i].active == true){
             // Increase the score and Print to UI
             score = score + 2;
             document.getElementById("displayScore").innerHTML = "Score:"+score;
@@ -671,7 +669,7 @@ function animate() {
                 console.log("Hit target 2");
             }
         }
-        if ((targetCollision (arrows[i].collision_msh,target[3]) || targetCollision(arrows[i].collision_msh,target[4]))&& arrows[i].active == true){
+        if ((collision (arrows[i].collision_msh,targetSphere[3]) || collision(arrows[i].collision_msh,targetSphere[4]))&& arrows[i].active == true){
             // Increase the score and Print to UI
             score = score + 1;
             document.getElementById("displayScore").innerHTML = "Score:"+score;
