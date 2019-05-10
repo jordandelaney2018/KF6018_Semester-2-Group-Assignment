@@ -374,7 +374,7 @@ function animate() {
     }
     if (collision(sphere3,leftHand_msh)|| collision(sphere3,rightHand_msh) ) {
 
-        alert("Game Three");
+        window.location.href = "explosiveGame.html";
     }
 
     requestAnimationFrame(animate);
