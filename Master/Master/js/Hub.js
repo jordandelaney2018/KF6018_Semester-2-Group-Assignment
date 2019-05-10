@@ -29,7 +29,7 @@ var tree =[];
 var target = [];
 // Camera
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.x = -1;
+camera.position.x = -2;
 camera.position.z = 4;
 camera.position.y = 10;
 
@@ -125,7 +125,7 @@ var sphereMaterial3 = new THREE.MeshLambertMaterial(
 
 
 // set up the sphere vars
-var radius = 0.2, segments = 16, rings = 16;
+var radius = 0.3, segments = 16, rings = 16;
 
 // create a new mesh with sphere geometry -
 var sphere = new THREE.Mesh(
