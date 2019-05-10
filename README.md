@@ -1,23 +1,25 @@
 # KF6018_A2_w16015149_w16019711_w16007006_w14015821
 
 ## Instructions
-* Hub Area
+* Hub Area (Jordan Delaney w16015149)
   * Move hand onto the position of the balls to select a game to play
   * The instructions are also links to the pages to help with testing)
-* Archery Game
+* Bowling Game (Cuthbert Mutumbwa w16019711)
+  * Close hands to shoot barrage of balls to knock over the objects
+  * Once hands close the game will count down, and once the countdown is hit the game will allow you to reset
+  * Clap to reset game
+  * Use mouse click to go back to main menu  
+* Archery Game (Andrew Patton w16007006)
   * Bow is attached to your left hand
   * Touch your right shoulder with your right hand to get a new arrow
   * Touch your hands together to 'nock' the arrow
   * Touch your right shoulder again to fire
-  * **Please Note:** The target placed closer to you is for easier collision testing
+  * **Please Note:** The target placed closest to you is deiberately easy to hit for the purpose of testing collisions
   * Use slingring to go back to hub world (see proposed features for more info)
-* Bowling Game
-  * Close hands to shoot barrage of balls to knock over the objects
-  * Once hands close the game will count down, and once the countdown is hit the game will allow you to reset
-  * Clap to reset game
-  * Use mouse click to go back to main menu
-* Explosion Game
-  * 
+* Explosion Game (Luke Phillips w14015821)
+  * Throw explosive by opening hands
+  * Trigger explosion by clapping
+  * Close hands to get a new exlosive
 
 ## Rendering Elements
 
