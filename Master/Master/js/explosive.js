@@ -613,7 +613,7 @@ function animate()
 	if(tar_msh.material.opacity==0)
 		window.location.href = "explosiveGame.html";
 	else
-		window.location.href = "gameHub.html";
+		window.location.href = "GameHub.html";
 	}
 	}
 	if (collision(pelvis_msh,leftHand_msh)|| collision(pelvis_msh,rightHand_msh))
